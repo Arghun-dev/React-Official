@@ -61,3 +61,39 @@ class Parent extends Component {
 // Now you can set focus when required
 this.inputElement.current.focus();
 ```
+
+
+## Mouse and pointer Events
+
+Ensure that all functionality exposed through a mouse or pointer event can also be accessed using the keyboard alone. Depending only on the pointer device will lead to many cases where keyboard users cannot use your application.
+
+To illustrate this, let’s look at a prolific example of broken accessibility caused by click events. This is the outside click pattern, where a user can disable an opened popover by clicking outside the element.
+
+This is typically implemented by attaching a click event to the window object that closes the popover:
+
+```js
+class OuterClickExample extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      isOpen: false;
+    }
+    
+    this.toggleContainer = React.createRef();
+    
+    this.onClickHandler = this.onClickHandler.bind(this);
+    this.onClickOutsideHandler = this.onClickOutsideHandler.bind(this);
+  }
+  
+  componentDidMount() {
+    window.addEventListener('click', this.onClickOutsideHandler)
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onClickOutsideHandler)
+  }
+  
+  
+}
+```
